@@ -5,9 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4b9feb5-0abb-469d-b05d-3e02bfd899d9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/alembic.ini" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/migrations/README" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/migrations/env.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/migrations/script.py.mako" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/categories.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/categories.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/products.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/products.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +158,10 @@
       <workItem from="1764262536292" duration="219000" />
       <workItem from="1764265314917" duration="1525000" />
       <workItem from="1764413100237" duration="328000" />
-      <workItem from="1764413438903" duration="276000" />
+      <workItem from="1764413438903" duration="1619000" />
+      <workItem from="1764501678132" duration="991000" />
+      <workItem from="1764530922411" duration="900000" />
+      <workItem from="1764531840278" duration="207000" />
     </task>
     <servers />
   </component>
