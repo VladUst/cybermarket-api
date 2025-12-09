@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from app.models.categories import Category as CategoryModel
 from app.schemas import Category as CategorySchema, CategoryCreate
 from app.db_depends import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.db_depends import get_async_db
 
 
 # Создаём маршрутизатор с префиксом и тегом
@@ -15,17 +17,17 @@ router = APIRouter(
 
 
 @router.get("/", response_model=list[CategorySchema])
-async def get_all_categories(db: Session = Depends(get_db)):
+async def get_all_categories(db: AsyncSession = Depends(get_async_db)):
     """
     Возвращает список всех активных категорий.
     """
-    stmt = select(CategoryModel).where(CategoryModel.is_active == True)
-    categories = db.scalars(stmt).all()
+    result = await db.scalars(select(CategoryModel).where(CategoryModel.is_active==True))
+    categories = result.all()
     return categories
 
 
 @router.post("/", response_model=CategorySchema, status_code=status.HTTP_201_CREATED)
-async def create_category(category: CategoryCreate, db: Session = Depends(get_db)):
+async def create_category(category: CategoryCreate, db: AsyncSession = Depends(get_async_db)):
     """
     Создаёт новую категорию.
     """
@@ -33,15 +35,15 @@ async def create_category(category: CategoryCreate, db: Session = Depends(get_db
     if category.parent_id is not None:
         stmt = select(CategoryModel).where(CategoryModel.id == category.parent_id,
                                            CategoryModel.is_active == True)
-        parent = db.scalars(stmt).first()
+        result = await db.scalars(stmt)
+        parent = result.first()
         if parent is None:
             raise HTTPException(status_code=400, detail="Parent category not found")
 
     # Создание новой категории
     db_category = CategoryModel(**category.model_dump())
     db.add(db_category)
-    db.commit()
-    db.refresh(db_category)
+    await db.commit()
     return db_category
 
 

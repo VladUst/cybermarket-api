@@ -1,8 +1,8 @@
-"""reate categories and products tables
+"""nitial migration for ostgre
 
-Revision ID: 253978899dc5
+Revision ID: 7f1fdc1f0ed4
 Revises: 
-Create Date: 2025-12-01 02:38:19.853903
+Create Date: 2025-12-09 14:07:54.978110
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '253978899dc5'
+revision: str = '7f1fdc1f0ed4'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
