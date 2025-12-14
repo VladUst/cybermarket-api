@@ -98,3 +98,31 @@ async def get_current_admin(current_user: UserModel = Depends(get_current_user))
     if current_user.role != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only admin can perform this action")
     return current_user
+
+async def verify_refresh_token(refresh_token: str) -> str:
+    """
+    Проверяет, соответствует ли введённый пароль сохранённому хешу.
+    """
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate refresh token",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    try:
+        payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str | None = payload.get("sub")
+        token_type: str | None = payload.get("token_type")
+
+        # Проверяем, что токен действительно refresh
+        if email is None or token_type != "refresh":
+            raise credentials_exception
+
+    except jwt.ExpiredSignatureError:
+        # refresh-токен истёк
+        raise credentials_exception
+    except jwt.PyJWTError:
+        # подпись неверна или токен повреждён
+        raise credentials_exception
+
+    return email
