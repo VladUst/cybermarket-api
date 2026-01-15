@@ -73,6 +73,7 @@ class User(BaseModel):
 
 class RefreshTokenRequest(BaseModel):
     refresh_token: str
+
 class ReviewCreate(BaseModel):
     product_id: int = Field(description="ID товара, к которому относится отзыв")
     comment: str | None = Field(None, description="Текст отзыва")
@@ -86,5 +87,17 @@ class Review(BaseModel):
     comment_date: datetime = Field(description="Дата и время создания отзыва")
     grade: int = Field(description="Оценка товара (1-5)")
     is_active: bool = Field(description="Активность отзыва")
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ProductList(BaseModel):
+    """
+    Список пагинации для товаров.
+    """
+    items: list[Product] = Field(description="Товары для текущей страницы")
+    total: int = Field(ge=0, description="Общее количество товаров")
+    page: int = Field(ge=1, description="Номер текущей страницы")
+    page_size: int = Field(ge=1, description="Количество элементов на странице")
 
     model_config = ConfigDict(from_attributes=True)
