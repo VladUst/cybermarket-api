@@ -10,7 +10,8 @@ from app.db_depends import get_async_db
 from app.models.cart_items import CartItem as CartItemModel
 from app.models.orders import Order as OrderModel, OrderItem as OrderItemModel
 from app.models.users import User as UserModel
-from app.schemas import Order as OrderSchema, OrderList
+from app.schemas.orders import Order as OrderSchema, OrderList
+from app.utils.orders import load_order_with_items
 
 router = APIRouter(
     prefix="/orders",
@@ -77,7 +78,7 @@ async def checkout_order(
     await db.execute(delete(CartItemModel).where(CartItemModel.user_id == current_user.id))
     await db.commit()
 
-    created_order = await _load_order_with_items(db, order.id)
+    created_order = await load_order_with_items(db, order.id)
     if not created_order:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -119,17 +120,7 @@ async def get_order(
     """
     Возвращает детальную информацию по заказу, если он принадлежит пользователю.
     """
-    order = await _load_order_with_items(db, order_id)
+    order = await load_order_with_items(db, order_id)
     if not order or order.user_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
     return order
-
-async def _load_order_with_items(db: AsyncSession, order_id: int) -> OrderModel | None:
-    result = await db.scalars(
-        select(OrderModel)
-        .options(
-            selectinload(OrderModel.items).selectinload(OrderItemModel.product),
-        )
-        .where(OrderModel.id == order_id)
-    )
-    return result.first()
